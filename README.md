@@ -65,6 +65,8 @@ GAN 之前的深度生成模型多半要写一个显式密度，再用变分下�
 - **生成器损失**：生成图像的目标是 1。它对应 non-saturating 目标，也就是让 D 把假样本判成真。
 - **R1 惩罚**：在真实图像上惩罚 D 对输入的梯度大小。这一项来自 Mescheder 等人 2018 年的收敛性分析，用来把判别器在真实样本附近压平，避免分数贴在 0 和 1 上震荡。MNIST 的系数是 10，CIFAR-10 的系数是 1。曲线里的 D loss 含有这一项。均衡点仍然是 D = 0.5。
 
+了解更多架构可以见文章：[GAN深入浅出](https://blog.csdn.net/Eric005/article/details/171045540?fromshare=blogdetail&sharetype=blogdetail&sharerId=171045540&sharerefer=PC&sharesource=Eric005&sharefrom=from_link)
+
 **和 2014 年论文对齐的部分**是这场最小最大博弈、Algorithm 1 的交替更新（k = 1），以及第 3 节的 non-saturating 生成器。本实现同时做了几处后来成为常规做法的改动：优化器使用 Adam（学习率 2e-4，beta 为 0.5 和 0.999），判别器隐层使用 LeakyReLU 和 Dropout，噪声先验是标准正态。2014 年论文的判别器使用 maxout，优化器是带动量的小批量 SGD。CIFAR-10 的卷积结构来自 DCGAN（Radford 等人，2016）：转置卷积逐级放大，卷积权重用标准差 0.02 的正态初始化，BatchNorm 的缩放初始化为均值 1、标准差 0.02 的正态。
 
 | | MNIST 全连接 | CIFAR-10 卷积 |
